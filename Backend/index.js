@@ -1,0 +1,23 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const CategoryRouter = require('./Router/CategoryRouter');
+const server = express();
+
+server.use(cors());
+server.use(express.json());
+server.use("/category" , CategoryRouter);
+
+mongoose.connect("mongodb://localhost:27017/", { dbname: "iShopz" }).then(
+    () => {
+        server.listen(5000, () => {
+            console.log('Server is running on port 5000');
+        })
+        console.log("Connected to MongoDB :)");
+    }
+).catch(
+    (err) => {
+        console.log("Error connecting to MongoDB:", err);
+    }
+);
+
