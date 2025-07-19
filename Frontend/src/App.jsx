@@ -7,6 +7,7 @@ import ViewCategory from './Admin/Pages/category/ViewCategory';
 import AddCategory from './Admin/Pages/category/AddCategory';
 import Contact from './Website/Pages/Contact';
 import Home from './Website/Pages/Home';
+import EditCategory from './Admin/Pages/category/EditCategory';
 
 export default function App() {
 
@@ -41,6 +42,10 @@ export default function App() {
         {
           path: "category/add",
           element: <AddCategory/>
+        },
+        {
+          path: "category/edit/:categoryId",
+          element: <EditCategory/>
         }
       ]
     }

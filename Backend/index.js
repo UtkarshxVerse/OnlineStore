@@ -7,6 +7,7 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 server.use("/category" , CategoryRouter);
+server.use(express.static("./Public"));         //server ka access de rhe h iss folder ko to open and view img of this folder
 
 mongoose.connect("mongodb://localhost:27017/", { dbname: "iShopz" }).then(
     () => {

@@ -15,10 +15,10 @@ const CategorySchema = new mongoose.Schema({
         type : Boolean,
         default: null
     },
-    // image : {
-    //     type: String,
-    //     required: true
-    // }   
+    image : {
+        type: String,
+        required: true
+    }   
 },
 {
     timestamps: true   // Automatically manage createdAt and updatedAt timimgs of user in db

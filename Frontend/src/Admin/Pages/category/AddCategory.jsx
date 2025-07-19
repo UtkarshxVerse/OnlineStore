@@ -18,13 +18,15 @@ const AddCategory = () => {
 
     const SubmitHandle = (e) => {
         e.preventDefault();
+        // console.log(e.target.status.value)
+        const formData = new FormData();
 
-        const data = {
-            name: nameRef.current.value,
-            slug: slugRef.current.value
-        }
+        formData.append('name', nameRef.current.value)
+        formData.append('slug', slugRef.current.value)
+        formData.append('status', e.target.status.value)
+        formData.append('image',e.target.categoryImage.files[0])
 
-        axios.post(API_BASE_URL + CATEGORY_URL + '/create', data).then(
+        axios.post(API_BASE_URL + CATEGORY_URL + '/create', formData).then(
             (res) => {
                 notify(res.data.msg, res.data.flag)
                 if (res.data.flag === 1) {
@@ -99,7 +101,7 @@ const AddCategory = () => {
                         <label className="block text-gray-700 font-medium mb-1">Images *</label>
                         <input
                             type="file"
-                            name="image"
+                            name="categoryImage"
                             // value={image}
                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 

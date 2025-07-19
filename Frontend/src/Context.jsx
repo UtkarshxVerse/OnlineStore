@@ -9,10 +9,18 @@ function Context(props) {
   const API_BASE_URL = "http://localhost:5000/"
   const CATEGORY_URL = "category"
 
-  function fetchCategories() {
-    axios.get(API_BASE_URL + CATEGORY_URL).then(
+  function fetchCategories(id = null) {
+    let URL = API_BASE_URL + CATEGORY_URL
+    if(id != null){
+      URL = URL + `/${id}`
+    }
+
+    axios.get(URL).then(
       (res) => {
-        setCategories(res.data.category)
+        if(res.data.flag === 1) {
+          setCategories(res.data.category)
+        }
+        
       }).catch(
         (err) => {
           setCategories([])
@@ -22,7 +30,7 @@ function Context(props) {
   const notify = (msg, flag) => toast(msg, { type: flag ? "success" : "error", autoClose: 1000 });
 
   return (
-    <MainContext.Provider value={{ API_BASE_URL, CATEGORY_URL, notify ,categories, fetchCategories }}>
+    <MainContext.Provider value={{ API_BASE_URL, CATEGORY_URL, notify , categories, fetchCategories , setCategories }}>
       <ToastContainer />
       {
         props.children

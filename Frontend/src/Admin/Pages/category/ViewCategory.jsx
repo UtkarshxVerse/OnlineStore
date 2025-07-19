@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
 import AddCategory from './AddCategory';
+import Swal from 'sweetalert2';
 
 
 const ViewCategory = ({ onBack }) => {
@@ -26,18 +27,42 @@ const ViewCategory = ({ onBack }) => {
 
   };
 
+
   function deleteHandler(id) {
-    axios.delete(API_BASE_URL + CATEGORY_URL + `/delete/${id}`).then(
-      (res) => {
-        notify(res.data.msg, res.data.flag)
-        if (res.data.flag === 1) {
-          fetchCategories();
-        }
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+        axios.delete(API_BASE_URL + CATEGORY_URL + `/delete/${id}`).then(
+
+          (res) => {
+
+            notify(res.data.msg, res.data.flag)
+            if (res.data.flag == 1) {
+              console.log(res.data.flag)
+              fetchCategories();
+            }
+          }
+        ).catch(
+          (err) => {
+            console.log(err)
+            notify("Error updating status", 0)
+          });
       }
-    ).catch(
-      (err) => {
-        notify("Error updating status", 0)
-      });
+    });
+
   }
 
 
@@ -85,6 +110,7 @@ const ViewCategory = ({ onBack }) => {
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Slug</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Image</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
               <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Actions</th>
             </tr>
@@ -93,10 +119,13 @@ const ViewCategory = ({ onBack }) => {
             {
               categories.map(
                 (category, index) => (
-                  <tr key={category.id}>
+                  <tr key={category._id}>
                     <td className="px-6 py-4 text-gray-800">{index + 1}</td>
                     <td className="px-6 py-4 text-gray-800">{category.name}</td>
                     <td className="px-6 py-4 text-gray-600">{category.slug}</td>
+                    <td className="px-6 py-4 text-gray-600">
+                      <img width='50px' src={`${API_BASE_URL}Images/Category/${category.image}`} alt="" />
+                    </td>
                     <td className="px-6 py-4">
                       <button onClick={() => statusHandler(category._id)}
                         className={`px-3 py-1 rounded-full text-sm font-medium ${category.status == true
@@ -105,14 +134,16 @@ const ViewCategory = ({ onBack }) => {
                           }`}
                       >
                         {
-                          category.status == true ? "Active" : "Inactive"
+                          category.status ? "Active" : "Inactive"
                         }
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right space-x-3">
-                      <button className="text-green-600 hover:text-green-800">
-                        <FaEdit />
-                      </button>
+                      <Link  to={`/admin/category/edit/${category._id}`}>
+                        <button className="text-green-600 hover:text-green-800">
+                          <FaEdit />
+                        </button>
+                      </Link>
                       <button onClick={() => deleteHandler(category._id)} className="text-red-600 hover:text-red-800">
                         <FaTrash />
                       </button>
