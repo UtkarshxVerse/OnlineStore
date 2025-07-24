@@ -42,7 +42,7 @@ const AddCategory = () => {
 
     return (
         <div>
-            <div>
+            <div className='flex gap-[630px] '>
                 <Link to={"/admin"}>
                     <button
                         // onClick={onBack}
@@ -52,9 +52,17 @@ const AddCategory = () => {
                         Back to Dashboard
                     </button>
                 </Link>
+                <Link to={"/admin/category"}>
+                    <button
+                        // onClick={onBack}
+                        className="bg-blue-600 rounded-lg py-1 px-4 mb-4 mt-7 ml-[100px] flex items-center text-white hover:text-blue-900 cursor-pointer"
+                    >
+                        View Category
+                    </button>
+                </Link>
             </div>
-            <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
-                <h2 className="text-xl font-semibold mb-4">Create New Category</h2>
+            <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg mt-3">
+                <h2 className="text-4xl font-bold mb-10">Create New Category</h2>
 
                 <form onSubmit={SubmitHandle} className="space-y-4">
                     {/* Name */}

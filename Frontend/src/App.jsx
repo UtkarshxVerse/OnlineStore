@@ -8,6 +8,13 @@ import AddCategory from './Admin/Pages/category/AddCategory';
 import Contact from './Website/Pages/Contact';
 import Home from './Website/Pages/Home';
 import EditCategory from './Admin/Pages/category/EditCategory';
+import ViewColor from './Admin/Pages/color/ViewColor';
+import AddColor from './Admin/Pages/color/AddColor';
+import EditColor from './Admin/Pages/color/EditColor';
+import ViewProduct from './Admin/Pages/product/ViewProduct';
+import AddProduct from './Admin/Pages/product/AddProduct';
+import EditProduct from './Admin/Pages/product/EditProduct';
+import MultipleImages from './Admin/Pages/product/MultipleImages';
 
 export default function App() {
 
@@ -46,7 +53,35 @@ export default function App() {
         {
           path: "category/edit/:categoryId",
           element: <EditCategory/>
-        }
+        },
+        {
+          path: "color",
+          element: <ViewColor/>
+        },
+        {
+          path: "color/add",
+          element: <AddColor/>
+        },
+        {
+          path: "color/edit/:colorId",
+          element: <EditColor/>
+        },
+        {
+          path: "product",
+          element: <ViewProduct/>
+        },
+        {
+          path: "product/add",
+          element: <AddProduct/>
+        },
+        {
+          path: "product/edit/:productId",
+          element: <EditProduct/>
+        },
+        {
+          path: "product/multiple/:productId",
+          element: <MultipleImages/>
+        },
       ]
     }
   ])

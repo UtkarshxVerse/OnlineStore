@@ -1,23 +1,23 @@
 import React from 'react'
 import { useEffect, useState, useContext } from 'react';
-import { FaArrowLeft, FaEdit, FaTrash,FaListAlt  } from 'react-icons/fa';
+import { FaArrowLeft, FaEdit, FaTrash, FaListAlt } from 'react-icons/fa';
 import { IoMdAdd } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
-import AddCategory from './AddCategory';
+import AddColor from './AddColor';
 import Swal from 'sweetalert2';
 
 
-const ViewCategory = () => {
-  const { categories, fetchCategories, API_BASE_URL, CATEGORY_URL, notify } = useContext(MainContext);
+const ViewColor = () => {
+  const { fetchColors, API_BASE_URL, COLOR_URL, notify, setColors, colors } = useContext(MainContext);
 
   function statusHandler(id) {
-    axios.patch(API_BASE_URL + CATEGORY_URL + `/status/${id}`).then(
+    axios.patch(API_BASE_URL + COLOR_URL + `/status/${id}`).then(
       (res) => {
         notify(res.data.msg, res.data.flag)
         if (res.data.flag === 1) {
-          fetchCategories();
+          fetchColors();
         }
       }
     ).catch(
@@ -45,14 +45,14 @@ const ViewCategory = () => {
           text: "Your file has been deleted.",
           icon: "success"
         });
-        axios.delete(API_BASE_URL + CATEGORY_URL + `/delete/${id}`).then(
+        axios.delete(API_BASE_URL + COLOR_URL + `/delete/${id}`).then(
 
           (res) => {
 
             notify(res.data.msg, res.data.flag)
             if (res.data.flag == 1) {
               console.log(res.data.flag)
-              fetchCategories();
+              fetchColors();
             }
           }
         ).catch(
@@ -68,7 +68,7 @@ const ViewCategory = () => {
 
   useEffect(
     () => {
-      fetchCategories();
+      fetchColors();
     }, []
   )
 
@@ -80,17 +80,17 @@ const ViewCategory = () => {
         <div>
           <h2 className="text-3xl font-bold mb-8 ml-2 text-gray-800 flex items-center gap-2">
             <FaListAlt />
-            Category List
+            Color List
           </h2>
         </div>
         <div>
-          <Link to={"/admin/category/add"}>
+          <Link to={"/admin/color/add"}>
             <div
               // onClick={onAdd}
               className="mb-4 mr-3 flex items-center text-blue-600 hover:text-blue-800 cursor-pointer"
             >
               < IoMdAdd className="mr-2 text-xl font-extrabold" />
-              Add Category
+              Add Color
             </div>
           </Link>
         </div>
@@ -104,41 +104,41 @@ const ViewCategory = () => {
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Slug</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Image</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Hexcode</th>
+              <th className="px-8 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
               <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
             {
-              Array.isArray(categories) && categories.map(
-                (category, index) => (
-                  <tr key={category._id}>
+              Array.isArray(colors) && colors.map(
+                (color, index) => (
+                  <tr key={color._id}>
                     <td className="px-6 py-4 text-gray-800">{index + 1}</td>
-                    <td className="px-6 py-4 text-gray-800">{category.name}</td>
-                    <td className="px-6 py-4 text-gray-600">{category.slug}</td>
-                    <td className="px-6 py-4 text-gray-600">
-                      <img width='50px' src={`${API_BASE_URL}Images/Category/${category.image}`} alt="" />
+                    <td className="px-6 py-4 text-gray-800">{color.name}</td>
+                    <td className="px-6 py-4 text-gray-600">{color.slug}</td>
+                    <td style={{ background: color.hexcode }} className=" px-6 py-4 text-gray-600">
+                      {color.hexcode}
                     </td>
                     <td className="px-6 py-4">
-                      <button onClick={() => statusHandler(category._id)}
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${category.status == true
+                      <button onClick={() => statusHandler(color._id)}
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${color.status == true
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-700'
                           }`}
                       >
                         {
-                          category.status ? "Active" : "Inactive"
+                          color.status ? "Active" : "Inactive"
                         }
                       </button>
                     </td>
                     <td className="px-6 py-4 text-right space-x-3">
-                      <Link to={`/admin/category/edit/${category._id}`}>
+                      <Link to={`/admin/color/edit/${color._id}`}>
                         <button className="text-green-600 hover:text-green-800">
                           <FaEdit />
                         </button>
                       </Link>
-                      <button onClick={() => deleteHandler(category._id)} className="text-red-600 hover:text-red-800">
+                      <button onClick={() => deleteHandler(color._id)} className="text-red-600 hover:text-red-800">
                         <FaTrash />
                       </button>
                     </td>
@@ -151,4 +151,4 @@ const ViewCategory = () => {
   );
 };
 
-export default ViewCategory;
+export default ViewColor;

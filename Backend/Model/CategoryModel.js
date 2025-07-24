@@ -13,7 +13,7 @@ const CategorySchema = new mongoose.Schema({
     },
     status : {
         type : Boolean,
-        default: null
+        default: true
     },
     image : {
         type: String,

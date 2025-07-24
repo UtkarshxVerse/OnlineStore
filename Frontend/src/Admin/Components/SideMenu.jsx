@@ -4,8 +4,8 @@ import { TbCategoryPlus } from "react-icons/tb";
 import { Link } from 'react-router-dom';
 
 const SideMenu = () => {
-    return (<div className="w-[290px]
-     h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-xl p-4 fixed left-0"> <h1 className="text-3xl font-bold mb-6 text-center text-white tracking-wide">VELZON</h1>
+    return (<div className="w-[306px]
+     h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-xl p-4 fixed left-0"> <h1 className="text-3xl font-bold mb-6 text-center text-white tracking-wide">iSHOPZ</h1>
 
         <div className="text-gray-400 text-l mb-2 pb-3">MENU</div>
         <div className="space-y-2">
@@ -18,11 +18,15 @@ const SideMenu = () => {
 
         <div className="text-gray-400 text-xs mt-6 mb-2">PAGES</div>
         <div className="space-y-2">
-            <Link to={"/admin/category"}> 
+            <Link to={"/admin/category"}>
                 <MenuItem icon={<TbCategoryPlus />} label="Category" expandable />
             </Link>
-            <MenuItem icon={<IoMdColorPalette />} label="Color" expandable />
-            <MenuItem icon={<FaRocket />} label="Product" expandable />
+            <Link to={"/admin/color"}>
+                <MenuItem icon={<IoMdColorPalette />} label="Color" expandable />
+            </Link>
+            <Link to={"/admin/product"}>
+                <MenuItem icon={<FaRocket />} label="Product" expandable />
+            </Link>
         </div>
 
         <div className="text-gray-400 text-xs mt-6 mb-2">COMPONENTS</div>

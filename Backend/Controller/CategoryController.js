@@ -119,68 +119,49 @@ const CategoryController = {
             return res.send({ msg: "Internal server error", flag: 0 });
         }
     },
+    
     async update(req, res) {
         try {
             const id = req.params.id;
-            const image = req.files.image ? req.files.image : null ;
-            const categories = await categoryModel.findById(id);
-            if (!categories) {
+            const image = req.files?.image || null;
+
+            const category = await categoryModel.findById(id);
+            if (!category) {
                 return res.send({ msg: "Category not found", flag: 0 });
             }
 
+            let updateData = {
+                name: req.body.name,
+                slug: req.body.slug
+            };
+
             if (image) {
-                const categoryImage = createUniqueImageName(image.name)
-                destination = "./Public/Images/Category/" + categoryImage;
+                const categoryImage = createUniqueImageName(image.name);
+                const destination = "./Public/Images/Category/" + categoryImage;
 
-                image.mv(
-                    destination,
-                    async (err) => {
+                // Wrap image.mv in a Promise to use await
+                await new Promise((resolve, reject) => {
+                    image.mv(destination, (err) => {
                         if (err) {
-                            return res.send({ msg: "Unable to upload category image", flag: 0 })
-                        } else {
-                            await categoryModel.updateOne(
-                                {
-                                    _id: id
-                                },
-                                {
-                                    name: req.body.name,
-                                    slug: req.body.slug,
-                                    image: categoryImage
-                                }
-                            ).then(
-                                () => {
-                                    res.send({ msg: "Category updated successfully" })
-                                }
-                            ).catch(
-                                (err) => {
-                                    return res.send({ msg: "Unable to update category" })
-                                }
-                            )
+                            return reject(err);
                         }
-                    }
-                )
+                        resolve();
+                    });
+                });
 
-            } else {
-                await categoryModel.updateOne(
-                    {
-                        _id: id
-                    },
-                    {
-                        name: req.body.name,
-                        slug: req.body.slug,
-                    }
-                ).then(
-                    () => {
-                        res.send({ msg: "Category updated successfully" })
-                    }
-                ).catch(
-                    (err) => {
-                        return res.send({ msg: "Unable to update category" })
-                    }
-                )
+                updateData.image = categoryImage;
             }
 
+            await categoryModel.updateOne(
+                {
+                     _id: id 
+                },
+                 updateData);
+
+            return res.send({ msg: "Category updated successfully", flag: 1 });
+
         } catch (error) {
+            console.error("Update error:", error);
             return res.send({ msg: "Internal server error", flag: 0 });
         }
     }

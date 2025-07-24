@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FaSave, FaTimes, FaArrowLeft } from 'react-icons/fa';
 import { useRef } from 'react';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const EditCategory = () => {
-    const { API_BASE_URL, CATEGORY_URL, notify, fetchCategories, categories } = useContext(MainContext);
-    const { categoryId } = useParams();
+const AddColor = () => {
+    const { API_BASE_URL, CATEGORY_URL, notify , COLOR_URL} = useContext(MainContext);
     const nameRef = useRef();
     const slugRef = useRef();
 
@@ -19,21 +18,19 @@ const EditCategory = () => {
 
     const SubmitHandle = (e) => {
         e.preventDefault();
-        // console.log(e.target.status.value)
-        const formData = new FormData();
+        // console.log(e.target)
+        
+        const data = {
+            name: nameRef.current.value,
+            slug: slugRef.current.value,
+            hexcode: e.target.hexcode.value
+        }
 
-        formData.append('name', nameRef.current.value)
-        formData.append('slug', slugRef.current.value)
-        // console.log(e.target.status)
-        // formData.append('status', e.target.status.value)
-        formData.append('image', e.target.categoryImage.files[0])
-
-        axios.put(API_BASE_URL + CATEGORY_URL + "/update/" + categoryId, formData).then(
+        axios.post(API_BASE_URL + COLOR_URL + '/create', data).then(
             (res) => {
                 notify(res.data.msg, res.data.flag)
-                if (res.data.flag == 1) {
-                    fetchCategories();
-                    // e.target.reset();
+                if (res.data.flag === 1) {
+                    e.target.reset();
                 }
             }
         ).catch(
@@ -42,12 +39,6 @@ const EditCategory = () => {
             });
 
     };
-
-    useEffect(
-        () => {
-            fetchCategories(categoryId);
-        }, [categoryId] // jb category id ayegi tb ye function firse chalega
-    )
 
     return (
         <div>
@@ -61,26 +52,25 @@ const EditCategory = () => {
                         Back to Dashboard
                     </button>
                 </Link>
-                <Link to={"/admin/category"}>
+                <Link to={"/admin/color"}>
                     <button
                         // onClick={onBack}
                         className="bg-blue-600 rounded-lg py-1 px-4 mb-4 mt-7 ml-[100px] flex items-center text-white hover:text-blue-900 cursor-pointer"
                     >
-                        View Category
+                        View Color
                     </button>
                 </Link>
             </div>
-            <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg mt-8">
-                <h2 className="text-4xl font-bold mb-10">Edit Category</h2>
+            <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg mt-3">
+                <h2 className="text-4xl font-bold mb-10">Create Color</h2>
 
                 <form onSubmit={SubmitHandle} className="space-y-4">
                     {/* Name */}
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Category Name *</label>
+                        <label className="block text-gray-700 font-medium mb-1"> Name *</label>
                         <input
                             type="text"
                             name="name"
-                            defaultValue={categories?.name}
                             ref={nameRef}
                             onChange={handleNameChange}
                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -94,7 +84,6 @@ const EditCategory = () => {
                         <input
                             type="text"
                             name="slug"
-                            defaultValue={categories.slug}
                             ref={slugRef}
                             // onChange={handleChange}
                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -103,30 +92,16 @@ const EditCategory = () => {
                     </div>
 
                     {/* Status */}
-                    <div>
-                        <label className="block text-gray-700 font-medium mb-1">Status</label>
-                        <select
-                            name="status"
-                            defaultValue={categories.status}
-                            // value="status"
-                            // onChange={handleChange}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-                    </div>
 
                     <div>
-                        <label className="block text-gray-700 font-medium mb-1">Images *</label>
+                        <label className="block text-gray-700 font-medium mb-1">Hexcode *</label>
                         <input
-                            type="file"
-                            name="categoryImage"
+                            type="color"
+                            name="hexcode"
                             // value={image}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
 
                         />
-                        <img width={150} src={`${API_BASE_URL}Images/Category/${categories.image}`} alt="" />
                     </div>
 
                     {/* Actions */}
@@ -152,4 +127,4 @@ const EditCategory = () => {
     );
 };
 
-export default EditCategory;
+export default AddColor;

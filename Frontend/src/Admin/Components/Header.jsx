@@ -2,7 +2,7 @@ import { FaBell, FaBars, FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/f
 
 export default function Header() {
   return (
-    <header className="bg-white shadow px-4 sm:px-6 py-4 flex items-center justify-between">
+    <header className="bg-white min-w shadow px-4 sm:px-6 py-4 flex items-center justify-between">
 
       {/* Left: Logo and Menu Toggle */}
       <div className="flex items-center space-x-4">
