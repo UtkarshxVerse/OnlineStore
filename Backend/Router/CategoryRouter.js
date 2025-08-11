@@ -2,6 +2,7 @@ const express = require('express');
 const CategoryController = require('../Controller/CategoryController');
 const CategoryRouter = express.Router();
 const fileUpload = require('express-fileupload');
+const AdminAuth = require('../Middleware/AdminAuth');
 
 CategoryRouter.post("/create", fileUpload({createParentPath : true}) ,CategoryController.create)
 CategoryRouter.get("/:id?" , CategoryController.getData)

@@ -4,8 +4,10 @@ import { useRef } from 'react';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const AddCategory = () => {
+    const admin = useSelector((state) => state.admin?.token);
     const { API_BASE_URL, CATEGORY_URL, notify } = useContext(MainContext);
     const nameRef = useRef();
     const slugRef = useRef();
@@ -26,7 +28,11 @@ const AddCategory = () => {
         formData.append('status', e.target.status.value)
         formData.append('image',e.target.categoryImage.files[0])
 
-        axios.post(API_BASE_URL + CATEGORY_URL + '/create', formData).then(
+        axios.post(API_BASE_URL + CATEGORY_URL + '/create', formData, {
+            headers: {
+                Authorization : admin?.token
+            }
+        }).then(
             (res) => {
                 notify(res.data.msg, res.data.flag)
                 if (res.data.flag === 1) {

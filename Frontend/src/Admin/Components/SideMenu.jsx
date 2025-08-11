@@ -2,8 +2,24 @@ import { FaTachometerAlt, FaThLarge, FaLayerGroup, FaUserShield, FaFileAlt, FaRo
 import { IoMdColorPalette } from "react-icons/io";
 import { TbCategoryPlus } from "react-icons/tb";
 import { Link } from 'react-router-dom';
-
+import {useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+ 
 const SideMenu = () => {
+    const navigator = useNavigate()
+    const admin = useSelector((state) => state.admin?.data)  
+
+    useEffect(
+        () => {
+            if(admin == null){
+                navigator('/admin/login')
+            }else{
+                navigator('/admin')
+            } 
+        },[admin]
+    )
+
     return (<div className="w-[306px]
      h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white shadow-xl p-4 fixed left-0"> <h1 className="text-3xl font-bold mb-6 text-center text-white tracking-wide">iSHOPZ</h1>
 

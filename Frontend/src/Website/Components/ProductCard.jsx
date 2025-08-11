@@ -93,7 +93,7 @@ const ProductCard = ({ product }) => {
 const ProductList = () => {
     return (
         <div className=" mx-[100px] py-10">
-            <h2 className="text-2xl font-bold ml-2 mb-6 text-gray-800">Our Products</h2>
+            <h2 className="text-5xl font-extrabold  ml-125 mb-10 text-gray-800 font-mono">Our Products</h2>
             <div className="grid gap-6  grid-cols-4 sm:grid-cols-2 md:grid-cols-4">
                 {products.map((product,index) => (
                     <ProductCard key={product.id} product={product} />

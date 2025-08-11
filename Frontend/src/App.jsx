@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AdminLayout from './Admin/Pages/adminLayout';
 import WebsiteLayout from './Website/Pages/WebsiteLayout';
@@ -15,8 +15,24 @@ import ViewProduct from './Admin/Pages/product/ViewProduct';
 import AddProduct from './Admin/Pages/product/AddProduct';
 import EditProduct from './Admin/Pages/product/EditProduct';
 import MultipleImages from './Admin/Pages/product/MultipleImages';
+import LoginPage from './Admin/Pages/LoginPage';
+import Store from './Website/Pages/Store';
+import Cart from './Website/Pages/Cart';
+import { useDispatch } from 'react-redux';
+import { lsToAdmin } from './redux/features/adminSlice';
+import AuthForm from './Website/Pages/AuthForm';
+import { lsToUser } from './redux/features/userSlice';
+import ProductView from './Website/Pages/ProductView';
 
 export default function App() {
+  const dispatcher = useDispatch();
+
+  useEffect(
+    () => {
+      dispatcher(lsToAdmin())
+      dispatcher(lsToUser())
+    },[]
+  )
 
   const routers = createBrowserRouter([
     {
@@ -30,6 +46,18 @@ export default function App() {
         {
           path: "/contact",
           element: <Contact/>
+        },
+        {
+          path: "/store/:categorySlug?",
+          element: <Store/>
+        },
+        {
+          path:"/cart",
+          element: <Cart/>
+        },
+        {
+          path:"/view",
+          element: <ProductView/>
         }
       ]
     }
@@ -83,6 +111,14 @@ export default function App() {
           element: <MultipleImages/>
         },
       ]
+    },
+    {
+      path: "/admin/login",
+      element: <LoginPage/>
+    },
+    {
+      path: "/login",
+      element: <AuthForm/>
     }
   ])
   return (

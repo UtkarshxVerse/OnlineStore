@@ -1,6 +1,8 @@
 const ProductModel = require('../Model/ProductModel');
 const { createUniqueImageName } = require('../helper');
 const { unlinkSync } = require("fs");
+const categoryModel = require("../Model/CategoryModel");
+const ColorModel = require("../Model/ColorModel");
 
 const ProductController = {
     async create(req, res) {
@@ -46,11 +48,21 @@ const ProductController = {
     async getData(req, res) {
         try {
             const id = req.params.id;
-            let products = null;
+            const filterQuery = {};
+            if(req.query.categorySlug) {
+                const category = await categoryModel.findOne({slug: req.query.categorySlug});
+                filterQuery.categoryId = category._id;   // filterQuery k ander categoryId key bna di aur uski value category me se le li 
+            }
+
+            if(req.query.colorSlug) {
+                const color = await ColorModel.findOne({slug: req.query.colorSlug});
+                filterQuery.colors = {$in: [color._id]}  // filterQuery k ander categoryId key bna di aur uski value category me se le li 
+            }
+
             if (id) {
-                products = await ProductModel.findById(id);
+                products = await ProductModel.findById(id)
             } else {
-                products = await ProductModel.find().populate(["categoryId", "colors"])  // populate reference leta h aur uske basis pr database me jake pura data lata h
+                products = await ProductModel.find(filterQuery).limit(req.query.limit || 0).populate(["categoryId", "colors"])  // populate reference leta h aur uske basis pr database me jake pura data lata h
             }
             // const categories = await categoryModel.find()
             if (!products) {
